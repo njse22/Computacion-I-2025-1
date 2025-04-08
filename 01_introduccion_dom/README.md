@@ -10,8 +10,6 @@ El **DOM (Document Object Model)** es una interfaz de programación para documen
 - Responder a eventos (clics, teclas, etc.).
 - Interactuar dinámicamente con la página.
 
-
-
 ## Ejemplo de Código:
 
 index.html
@@ -23,9 +21,9 @@ index.html
         <title>Intro DOM</title>
     </head>
     <body>
-        <p id="messageText">Parrafo</p>	
+        <p id="messageText">Parrafo</p>    
         <textarea id="inputText">Ingresa texto aquí...</textarea>
-        
+
         <button onclick="addTextToList()">Agregar a la lista</button>
 
         <form id="formElement">
@@ -43,11 +41,7 @@ index.html
 </html>
 ```
 
-
-
 Index.js: 
-
-
 
 ```javascript
 let msgText; 
@@ -84,7 +78,7 @@ function showParagraph() {
 function addTextToList() {
     const input = document.getElementById("inputText");
     const list = document.getElementById("formList");
-    
+
     if (input.value.trim() !== "") {  
         const newItem = document.createElement("li");
         newItem.textContent = input.value;
