@@ -10,11 +10,8 @@ const UserController = {
     get: (req, res) => {
 	try{
 	    const db = dbConnection.readDB(); 
-	    console.log(req.params)
-	    console.log(req.body)
 	    const id = req.params.id;
 	    const userGet = db.users.find(user => user.id == id)
-	    console.log("Controller::userGet >> ", userGet)
 	    if(!userGet){
 		res.status(404).json({error: "user not found"})
 	    }
@@ -29,13 +26,11 @@ const UserController = {
     },
     // POST 
     create: (req, res) => {
+	console.log(req)
 
 	try {
 	    const db = dbConnection.readDB()
 	    const userData = req.body
-	    console.log(req.body.name)
-	    console.log(req.body.email)
-
 	    const newUser = new user(userData.name, userData.email)
 	    
 	    newUser.id = db.users.length ? db.users[db.users.length - 1].id + 1 : 1;
@@ -43,7 +38,7 @@ const UserController = {
 	    db.users.push(newUser)
 	    dbConnection.writDB(db)
 
-	    res.status(201).send("create user ")
+	    res.status(201).send("create user user")
 	}
 	catch(error){
 	    res.status(500).json({error: error.message })
