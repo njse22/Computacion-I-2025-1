@@ -8,13 +8,6 @@ app.use(express.json())
 
 app.use(cors());
 
-app.use((req, res, next) => {
-  if (req.path.includes(":")) {
-    return res.status(400).json({ error: "Ruta inválida" });
-  }
-  next();
-});
-
 const port = 5000
 
 // Creando los endpoints para la gestion de usuarios:
