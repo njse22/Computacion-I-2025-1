@@ -1,18 +1,17 @@
 {
-  "name": "02_apirest",
+  "name": "guide",
   "version": "1.0.0",
-  "description": "## Creación del proyeto",
   "main": "index.js",
-  "directories": {
-    "doc": "doc"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "description": "",
   "dependencies": {
-    "express": "^5.1.0"
+    "cors": "^2.8.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.1"
   }
 }

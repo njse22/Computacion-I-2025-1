@@ -1,28 +1,55 @@
 const express = require("express")
-const app = express()
+const cors = require("cors");
+const path = require('path');
+const user = require("./control/usercontroller")
 
+const app = express()
 app.use(express.json())
+
+app.use(cors());
+
+app.use((req, res, next) => {
+  if (req.path.includes(":")) {
+    return res.status(400).json({ error: "Ruta inválida" });
+  }
+  next();
+});
 
 const port = 5000
 
+// Creando los endpoints para la gestion de usuarios:
+app.get("/users", user.list)
 
-// método GET -> al recurso /
+app.get("/users/:id", user.get)
+
+app.post("/users/", user.create)
+
+app.put("/users/:id", user.update)
+
+app.delete("/users/:id", user.delete)
+
+
+// método | verbo GET
 app.get("/", (req, res) => {
-    res.status(200).send("Hola API")
+  // 200 -> OK : https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/200
+  res.status(200).send("Hola desde el API")  
 })
 
 app.post("/", (req, res) => {
-    res.status(201).send("element created")
-
+   // 201 -> OK -> Data Created : https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/201
+  res.status(201).send("element created")  
 })
 
 app.put("/", (req, res) => {
-    res.status(204).send("NO content in edit")
-
+  res.status(204).send("NO Content in edit")  
 })
 
 app.delete("/", (req, res) => {
-    res.status(204).send("NO content in delete")
+  res.status(204).send("NO content in delete")  
+})
+
+app.get('*', (req, res) => {
+    res.status(404).sendFile(path.join(__dirname, '..', 'public' , 'notfound.html'))
 })
 
 app.listen(port)
