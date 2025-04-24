@@ -512,7 +512,7 @@ app.get('*', (req, res) => {
     res.status(404).sendFile(path.join(__dirname, '..', 'public' , 'notfound.html'))
 })
 
-app.listen(port)
+app.listen(port)undefined
 ```
 
 ## Crear aplicación del cliente:

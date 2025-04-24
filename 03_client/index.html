@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Usuarios</title>
+    </head>
+    <body>
+	<h1> Application </h1>
+
+	<form id="user-form">
+	    <input type="text" id="user-id">
+	    <label for="name">Name: </label>
+	    <input type="text" id="name" required>
+	    <label for="email">Email: </label>
+	    <input type="text" id="email" required>
+
+	    <button type="submit"> Guardar</button>
+	</form>
+
+	<button onclick="listUsers()"> 
+	    Listar Usuarios 
+	</button>
+
+	<div id="users-list"></div>
+
+	<script src="./index.js"> </script>
+	
+    </body>
+</html>
