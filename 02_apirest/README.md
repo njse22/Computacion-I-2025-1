@@ -525,6 +525,12 @@ client
 └── index.js
 ```
 
+Instalar dependencias: 
+
+```bash
+npm install cors@2.8.5 ejs@3.1.10 express@4.21.2
+```
+
 Crear el HTML: 
 
 ```html
