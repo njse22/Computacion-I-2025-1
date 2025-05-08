@@ -27,7 +27,7 @@ public class Sender {
 		    msj.length()    // length message 
 		    );
 	    //					dest. ip     | dest. port  
-	    socket.connect(InetAddress.getByName("192.168.131.41"), 5000);
+	    socket.connect(InetAddress.getByName("127.0.0.1"), 5000);
 	    // se empaqueta y se le pasa al socket
 	    socket.send(packet);
 
