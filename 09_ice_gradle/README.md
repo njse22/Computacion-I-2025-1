@@ -191,7 +191,7 @@ Configuración con gradle:
                continue;
             }
             String[] command = msg.split("::");
-            publisher.notifySuscribers(command[0], command[1]);
+            publisher.notifySuscriber(command[0], command[1]);
         }        
         cummunicator.waitForShutdown(); 
         reader.close();
@@ -261,7 +261,7 @@ Configuración con gradle:
   */
   public class SuscriberI implements Demo.Suscriber {
     @Override
-    public void update(String msg, Current current){
+    public void onUpdate(String msg, Current current){
         System.out.println(msg);
     }   
   }

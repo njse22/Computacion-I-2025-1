@@ -1,4 +1,4 @@
-package model;
+package model.client;
 
 import java.io.*;
 import java.net.Socket;
@@ -10,11 +10,19 @@ public class TCPClient {
         try {
             // creo la conexión con el servidor
             System.out.println("Conectando al servidor ...");
-            Socket socket = new Socket("127.0.0.1", 5000);
-            System.out.println("Servidor conectado");
 
             // entrade de información (consola)
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+            System.out.println("Type IP server: ");
+            String ipServer = reader.readLine();
+
+            System.out.println("Type port server: ");
+            int portServer = Integer.parseInt(reader.readLine());
+
+            System.out.println("Connecing ..... ");
+            Socket socket = new Socket(ipServer, portServer);
+            System.out.println("Servidor conectado");
 
             // lee la información que llega del socket
             BufferedReader socketReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -27,6 +35,8 @@ public class TCPClient {
             System.out.println("Escribe un mensaje para el servidor: ");
             while ( (msg = reader.readLine()) != null && !msg.equalsIgnoreCase("exit")){
                 writer.println(msg);
+                //writerBF.write(msg + "\n");
+                //writerBF.flush();
                 String response = socketReader.readLine();
                 System.out.println(response);
             }
@@ -36,6 +46,7 @@ public class TCPClient {
             // y enviarlos por el socket
             reader.close();
             writer.close();
+            //writerBF.close();
             socket.close();
 
         } catch (IOException e) {
