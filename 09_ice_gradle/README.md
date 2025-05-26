@@ -6,7 +6,6 @@ La idea detrás de RPC es hacer que una llamada a un procedimiento remoto se par
 _Figura 1. Descripción y secuencia de un RPC (Con los componentes de Ice en rojo)_
 Esta _biblioteca_ es definida por medio de un  archivo .ice, el cual es definido en el lenguaje [slice](https://doc.zeroc.com/ice/3.6/the-slice-language)
 
-
 Los pasos que sigue un RPC se resumen en la figura 1. los pasos son: 
 
 - El cliente llama al client stup, en el caso de Ice llama al Ice Proxy
@@ -147,59 +146,61 @@ Configuración con gradle:
   import Demo.SuscriberPrx;
   import Demo.PublisherPrx;
   
-  
   public class PublisherI implements Demo.Publisher {
-    private HashMap<String, SuscriberPrx> suscribers; 
-    public PublisherI(){
-        suscribers = new HashMap<>(); 
-    }
-    @Override
-    public void addSuscriber(String name, SuscriberPrx suscriber, Current current){
-        System.out.println("New Suscriber: ");
-        suscribers.put(name, suscriber); 
-    }
-    @Override
-    public void removeSuscriber(String name, Current current){
-        suscribers.remove(name); 
-        System.out.println("Suscriber has been removed ");
-    }
-    public void notifySuscriber(String name, String msg){
-        SuscriberPrx suscriber = suscribers.get(name); 
-        suscriber.onUpdate(msg);
-    }
+   private HashMap<String, SuscriberPrx> suscribers; 
+  public PublisherI(){
+   suscribers = new HashMap<>(); 
   }
+   @Override
+   public void addSuscriber(String name, SuscriberPrx suscriber, Current current){
+   System.out.println("New Suscriber: ");
+   suscribers.put(name, suscriber); 
+  }
+   @Override
+   public void removeSuscriber(String name, Current current){
+   suscribers.remove(name); 
+  System.out.println("Suscriber has been removed ");
+   }
+   public void notifySuscriber(String name, String msg){
+   SuscriberPrx suscriber = suscribers.get(name); 
+  suscriber.onUpdate(msg);
+   }
+   }
   ```
 
+```
 - Server: server/src/main/java/Server.java
-  
-  ```java
-  import java.io.*;
-  import com.zeroc.Ice.*;
-  public class Server {
-    public static void main(String[] args) {
-        try (Communicator cummunicator = Util.initialize(args, "properties.cfg")){
-        ObjectAdapter adapter = cummunicator.createObjectAdapter("services"); 
-        PublisherI publisher = new PublisherI();
-        adapter.add(publisher, Util.stringToIdentity("Publisher")); 
-        adapter.activate(); 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)); 
-        String msg = "";
-        System.out.println("Envia un mensaje con el formato: NameSuscribe::Mensaje");
-        while ((msg = reader.readLine()) != null ){ 
-           if (!msg.contains("::")) {
-               System.out.println("Formato incorrecto. Intente de nuevo.");
-               continue;
-            }
-            String[] command = msg.split("::");
-            publisher.notifySuscriber(command[0], command[1]);
-        }        
-        cummunicator.waitForShutdown(); 
-        reader.close();
-       }
-       catch (IOException e) {
-            e.printStackTrace(); 
-       }
-  ```
+```
+
+```java
+import java.io.*;
+import com.zeroc.Ice.*;
+
+public class Server {
+  public static void main(String[] args) {
+      try (Communicator cummunicator = Util.initialize(args, "properties.cfg")){
+      ObjectAdapter adapter = cummunicator.createObjectAdapter("services"); 
+      PublisherI publisher = new PublisherI();
+      adapter.add(publisher, Util.stringToIdentity("Publisher")); 
+      adapter.activate(); 
+      BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)); 
+      String msg = "";
+      System.out.println("Envia un mensaje con el formato: NameSuscribe::Mensaje");
+      while ((msg = reader.readLine()) != null ){ 
+         if (!msg.contains("::")) {
+             System.out.println("Formato incorrecto. Intente de nuevo.");
+             continue;
+          }
+          String[] command = msg.split("::");
+          publisher.notifySuscriber(command[0], command[1]);
+      }        
+      cummunicator.waitForShutdown(); 
+      reader.close();
+     }
+     catch (IOException e) {
+          e.printStackTrace(); 
+     }
+```
 
 - server/src/main/resources/properties.cfg
   
@@ -303,3 +304,22 @@ Configuración con gradle:
   ```bash
   java -jar client/build/libs/client.jar
   ```
+
+
+
+# Cambios para ejecución de Multiples Clientes
+
+- client/bin/main/properties.cfg
+
+```groovy
+Suscriber.Endpoints = default -p <Client-Port>
+publisher.proxy = Publisher:default -p 5000 -h <Server-IP>
+```
+
+
+
+- server/src/main/resources/properties.cfg
+
+```groovy
+services.Endpoints=default -h 0.0.0.0 -p <Server-IP>
+```
