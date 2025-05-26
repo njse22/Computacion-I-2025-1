@@ -1,3 +1,8 @@
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import com.zeroc.Ice.*; 
 
 public class Server{
@@ -17,11 +22,24 @@ public class Server{
 		    Util.stringToIdentity("Publisher"));
 	    adapter.activate();
 
+	    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)); 
+	    String msj = ""; 
 
-	    publisher.notifySuscriber("sus1", 
-		    "Hola desde el server site"); 
-
+	    System.out.println("Type a message in format NameSuscribe::Message");
+	    while ((msj = reader.readLine()) != null) {
+		if(!msj.contains("::")){
+		    System.out.println("Incorrect format ");
+		    continue; 
+		}
+		String[] command = msj.split("::"); 
+		publisher.notifySuscriber(command[0], command[1]);
+	    	
+	    }
+	    reader.close();
 	    communicator.waitForShutdown(); 
+	}
+	catch(IOException e){
+	    e.printStackTrace();
 	}
     }
 }

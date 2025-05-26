@@ -1,3 +1,8 @@
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import com.zeroc.Ice.*;
 
 import Demo.*; 
@@ -32,7 +37,15 @@ public class Client {
 	    if(publisher == null){
 		throw new Error("Bat Ice Proxy"); 
 	    }
-    		
-    	} 
+
+	    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)); 
+	    String name = reader.readLine(); 
+
+	    publisher.addSuscriber(name, suscriberPrx);
+	    communicator.waitForShutdown();
+    	}
+	catch(IOException e){
+	    e.printStackTrace();
+	}
     }
 }
